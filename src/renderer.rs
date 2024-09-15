@@ -48,9 +48,11 @@ fn draw_words(
         if is_whitespace(word.to_string()) {
             continue;
         }
-        // println!("Drawing word: '{}'", word);
+        let word_with_space = format!("{} ", word);
+        let size = font.measure_text(word_with_space, None);
         let text_blob = TextBlob::from_str(word, font).unwrap();
-        let text_width = text_blob.bounds().width() - adjustment;
+
+        let text_width = size.0;
         let text_height = text_blob.bounds().height();
         if *x > start_x && *x + text_width > width {
             *x = start_x;
