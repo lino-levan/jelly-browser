@@ -41,7 +41,7 @@ fn draw_words(
     font: &skia_safe::Font,
 ) {
     let text = text.trim();
-    let width = canvas.base_layer_size().width as f32 - 32.0;
+    let width = canvas.base_layer_size().width as f32 - 32.0; // Account for padding
 
     let words = text.split_whitespace();
     for word in words {
@@ -76,7 +76,7 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                 attributes: _,
                 children,
             } => match tag.as_str() {
-                "header" | "head" => {
+                "head" => {
                     continue;
                 }
                 "h1" => {
@@ -166,57 +166,6 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                         }
                     }
                     canvas.translate((0, y as i32 + 65));
-                }
-                "body" => {
-                    let mut x = 0.0;
-                    let mut y = 0.0;
-                    for child in children {
-                        match child {
-                            HTMLNode::Text(text) => {
-                                if is_whitespace(text.to_string()) {
-                                    continue;
-                                }
-                                draw_words(
-                                    text,
-                                    canvas,
-                                    &mut x,
-                                    &mut y,
-                                    50.0,
-                                    0.0,
-                                    &paint,
-                                    &get_font(16),
-                                );
-                            }
-                            HTMLNode::Element {
-                                tag,
-                                attributes: _,
-                                children,
-                            } if tag == "a" => {
-                                let words = match children.first().clone() {
-                                    Some(HTMLNode::Text(text)) => text,
-                                    _ => panic!("Expected text node in a a"),
-                                };
-                                draw_words(
-                                    words,
-                                    canvas,
-                                    &mut x,
-                                    &mut y,
-                                    50.0,
-                                    0.0,
-                                    &blue_paint,
-                                    &get_font(16),
-                                );
-                            }
-                            _ => {
-                                if x > 0.0 {
-                                    canvas.translate((0, y as i32 + 65));
-                                    y = 0.0;
-                                    x = 0.0;
-                                }
-                                render_frame(&vec![child.clone()], canvas);
-                            }
-                        }
-                    }
                 }
                 "dl" => {
                     for child in children {
@@ -327,11 +276,59 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                         }
                     }
                 }
-                "html" => {
-                    render_frame(children, canvas);
+                "br" => {
+                    canvas.translate((0, 50));
                 }
-                "div" => {
-                    render_frame(children, canvas);
+                "html" | "header" | "div" | "section" | "body" => {
+                    let mut x = 0.0;
+                    let mut y = 0.0;
+                    for child in children {
+                        match child {
+                            HTMLNode::Text(text) => {
+                                if is_whitespace(text.to_string()) {
+                                    continue;
+                                }
+                                draw_words(
+                                    text,
+                                    canvas,
+                                    &mut x,
+                                    &mut y,
+                                    50.0,
+                                    0.0,
+                                    &paint,
+                                    &get_font(16),
+                                );
+                            }
+                            HTMLNode::Element {
+                                tag,
+                                attributes: _,
+                                children,
+                            } if tag == "a" => {
+                                let words = match children.first().clone() {
+                                    Some(HTMLNode::Text(text)) => text,
+                                    _ => panic!("Expected text node in a a"),
+                                };
+                                draw_words(
+                                    words,
+                                    canvas,
+                                    &mut x,
+                                    &mut y,
+                                    50.0,
+                                    0.0,
+                                    &blue_paint,
+                                    &get_font(16),
+                                );
+                            }
+                            _ => {
+                                if x > 0.0 {
+                                    canvas.translate((0, y as i32 + 65));
+                                    y = 0.0;
+                                    x = 0.0;
+                                }
+                                render_frame(&vec![child.clone()], canvas);
+                            }
+                        }
+                    }
                 }
                 "!doctype" => {
                     // no-op
