@@ -105,7 +105,10 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                             } if tag == "a" => {
                                 let words = match children.first().clone() {
                                     Some(HTMLNode::Text(text)) => text,
-                                    _ => panic!("Expected text node in a a"),
+                                    _ => {
+                                        render_frame(&vec![child.clone()], canvas);
+                                        return;
+                                    }
                                 };
                                 draw_words(
                                     words,
@@ -149,7 +152,10 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                             } if tag == "a" => {
                                 let words = match children.first().clone() {
                                     Some(HTMLNode::Text(text)) => text,
-                                    _ => panic!("Expected text node in a a"),
+                                    _ => {
+                                        render_frame(&vec![child.clone()], canvas);
+                                        return;
+                                    }
                                 };
                                 draw_words(
                                     words,
@@ -254,7 +260,10 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                                         } if tag == "a" => {
                                             let words = match children.first().clone() {
                                                 Some(HTMLNode::Text(text)) => text,
-                                                _ => panic!("Expected text node in a a"),
+                                                _ => {
+                                                    render_frame(&vec![child.clone()], canvas);
+                                                    return;
+                                                }
                                             };
                                             draw_words(
                                                 words,
@@ -281,7 +290,7 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                 "br" => {
                     canvas.translate((0, 50));
                 }
-                "html" | "header" | "div" | "section" | "body" => {
+                "html" | "header" | "div" | "section" | "body" | "main" | "nav" => {
                     let mut x = 0.0;
                     let mut y = 0.0;
                     for child in children {
@@ -308,7 +317,10 @@ pub fn render_frame(nodes: &Vec<HTMLNode>, canvas: &skia_safe::canvas::Canvas) {
                             } if tag == "a" => {
                                 let words = match children.first().clone() {
                                     Some(HTMLNode::Text(text)) => text,
-                                    _ => panic!("Expected text node in a a"),
+                                    _ => {
+                                        render_frame(&vec![child.clone()], canvas);
+                                        return;
+                                    }
                                 };
                                 draw_words(
                                     words,

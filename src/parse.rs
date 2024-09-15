@@ -49,6 +49,7 @@ fn parse_tag(
                 || tag == "br/" // self-closing br tag
                 || tag == "img"
                 || tag == "input"
+                || tag == "wbr"
             {
                 return HTMLNode::Element {
                     tag: tag.clone(),

@@ -55,7 +55,7 @@ fn main() {
     let el = EventLoop::new().expect("Failed to create event loop");
 
     let window_attributes = WindowAttributes::default()
-        .with_title("Browser Jam 001 Entry")
+        .with_title("Jelly Browser")
         .with_inner_size(LogicalSize::new(800, 800));
 
     let template = ConfigTemplateBuilder::new()

@@ -834,6 +834,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
+name = "jelly-browser"
+version = "0.1.0"
+dependencies = [
+ "gl",
+ "glutin",
+ "glutin-winit",
+ "raw-window-handle",
+ "reqwest",
+ "sdl2",
+ "skia-bindings",
+ "skia-safe",
+ "winit",
+]
+
+[[package]]
 name = "jni"
 version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -927,21 +942,6 @@ dependencies = [
  "bitflags 2.6.0",
  "libc",
  "redox_syscall 0.5.4",
-]
-
-[[package]]
-name = "lino-levan"
-version = "0.1.0"
-dependencies = [
- "gl",
- "glutin",
- "glutin-winit",
- "raw-window-handle",
- "reqwest",
- "sdl2",
- "skia-bindings",
- "skia-safe",
- "winit",
 ]
 
 [[package]]
